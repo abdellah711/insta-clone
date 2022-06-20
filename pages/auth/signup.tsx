@@ -40,8 +40,7 @@ const Signup = () => {
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="max-w-md mx-auto flex-1">
-                <AuthForm onSubmit={handleSubmit} submitTxt="Sign up" disabled={isLoading}>
-                    {error && <p className="text-red-500 border border-red-500 py-2 px-3 rounded-sm bg-red-50">{error}</p>}
+                <AuthForm onSubmit={handleSubmit} submitTxt="Sign up" disabled={isLoading} error={error}>
                     <Input type="email" name="email" placeholder='email' onChange={handleChange} value={formData['email']} />
                     <Input type="text" name="fullname" placeholder='full name' onChange={handleChange} value={formData['fullname']} />
                     <Input type="username" name="username" placeholder='username' onChange={handleChange} value={formData['username']} />

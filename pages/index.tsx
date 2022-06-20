@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import AuthForm from '../components/AuthForm'
-import LoginForm from '../components/AuthForm/LoginForm'
 
 const Home: NextPage = () => {
   return (
@@ -11,7 +10,6 @@ const Home: NextPage = () => {
         <meta name="description" content="Instagram clone" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <LoginForm/>
       
     </div>
   )
