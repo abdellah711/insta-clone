@@ -1,13 +1,33 @@
 import AuthForm, { RedirectCard } from "components/AuthForm"
 import Input from "components/AuthForm/Input"
-import { ChangeEventHandler, FormEventHandler, useEffect, useState } from "react"
+import { useRouter } from "next/router"
+
+import { ChangeEventHandler, FC, FocusEventHandler, FormEventHandler, useState } from "react"
 
 
 const Signup = () => {
     const [formData, setFormData] = useState({ email: '', password: '', fullname: '', username: '' })
+    const [valideData, setValideData] = useState({ email: true, username: true })
     const [error, setError] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
+    const router = useRouter()
+
+
+    //used to validate the username and the email
+    const handleBlur: FocusEventHandler<HTMLInputElement> = async (e) => {
+        const fieldName = e.currentTarget.name as 'email' | 'username'
+        if (formData[fieldName] === '') {
+            setValideData(data => ({ ...data, [fieldName]: false }))
+            return
+        }
+
+        const resp = await fetch(`/api/auth/exist?${fieldName}=${encodeURIComponent(formData[fieldName])}`)
+        if (resp.ok) {
+            const { exists } = await resp.json()
+            setValideData(data => ({ ...data, [fieldName]: !exists }))
+        }
+    }
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
         setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value })
@@ -26,8 +46,8 @@ const Signup = () => {
             })
             const { message } = await resp.json()
             if (resp.ok) {
-                console.log({ message })
                 setIsLoading(false)
+                router.replace('/')
                 return
             }
             setError(message)
@@ -40,10 +60,10 @@ const Signup = () => {
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="max-w-md mx-auto flex-1">
-                <AuthForm onSubmit={handleSubmit} submitTxt="Sign up" disabled={isLoading} error={error}>
-                    <Input type="email" name="email" placeholder='email' onChange={handleChange} value={formData['email']} />
+                <AuthForm onSubmit={handleSubmit} submitTxt="Sign up" disabled={isLoading || Object.values(valideData).some(x => !x)} error={error}>
+                    <Input type="email" name="email" placeholder='email' error={!valideData.email} onChange={handleChange} value={formData['email']} onBlur={handleBlur} />
                     <Input type="text" name="fullname" placeholder='full name' onChange={handleChange} value={formData['fullname']} />
-                    <Input type="username" name="username" placeholder='username' onChange={handleChange} value={formData['username']} />
+                    <Input type="username" name="username" placeholder='username' error={!valideData.username} onChange={handleChange} value={formData['username']} onBlur={handleBlur} />
                     <Input type="password" name="password" placeholder='password' onChange={handleChange} value={formData['password']} />
                 </AuthForm>
                 <RedirectCard login={false} />
@@ -51,7 +71,6 @@ const Signup = () => {
         </div>
     )
 }
-
 
 
 export default Signup

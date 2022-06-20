@@ -9,10 +9,10 @@ const signup: NextApiHandler<{ message?: string }> = async (req, res) => {
     if(!userData) return res.status(400).json({message:"No data provided"})
 
     const userSchema = object({
-        email: string().email("Please enter a valid email").required(),
+        email: string().email("Please enter a valid email").required().lowercase(),
         password: string().min(6).required(),
-        username: string().required(),
-        fullname: string().required()
+        username: string().required().lowercase(),
+        fullname: string().required().lowercase()
     })
     
     try {

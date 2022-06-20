@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { FC, FormEventHandler, ReactNode } from 'react'
-import FB from '../../public/assets/icons/facebook.svg'
+import FB from 'public/assets/icons/facebook.svg'
 
 interface Props {
     children: ReactNode[];
