@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import AuthForm from '../components/AuthForm'
 
 const Home: NextPage = () => {
   return (
