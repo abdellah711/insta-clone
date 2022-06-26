@@ -12,7 +12,7 @@ interface Props {
 
 const AuthForm: FC<Props> = ({ children, onSubmit, disabled = false, submitTxt, error }) => {
     return (
-        <div className='px-5 py-12 border border-gray-400 rounded-sm bg-white'>
+        <div className='px-5 py-12 border border-gray-400 rounded bg-white'>
 
             <form className='flex flex-col gap-3' onSubmit={onSubmit}>
                 <div className='mx-auto'>
