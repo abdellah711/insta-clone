@@ -8,7 +8,7 @@ export const middleware: NextMiddleware = async (req, ev) => {
 
     if(url.pathname.startsWith('/api/auth')) return NextResponse.next()
 
-    if (url.pathname.startsWith('/auth')) {
+    if (url.pathname.startsWith('/auth') && !url.pathname.startsWith('/auth/fb')) {
         if(token){
             url.pathname = '/'
             return NextResponse.redirect(url)

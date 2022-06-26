@@ -22,12 +22,16 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const session = await getSession(ctx)
+  if (!session) return { redirect: { destination: '/auth/login', permanent: false } }
+
+  const user = await prisma.user.findUnique({ where: { id: +session.user.id! } })
+  if (!user?.username) return { redirect: { destination: '/auth/fb', permanent: false } }
 
   const posts = await prisma.post.findMany({
     include: {
       owner: { select: { fullname: true, username: true } },
       _count: true,
-      likes: { where: { userId: session?.user.id } }
+      likes: { where: { userId: user.id } }
     }
   })
 

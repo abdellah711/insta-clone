@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { FC, FormEventHandler, ReactNode } from 'react'
 import FB from 'public/assets/icons/facebook.svg'
+import { signIn } from 'next-auth/react';
 
 interface Props {
     children: ReactNode[];
@@ -28,7 +29,7 @@ const AuthForm: FC<Props> = ({ children, onSubmit, disabled = false, submitTxt, 
                 <span className='px-4'>OR</span>
                 <span className='flex-1 h-[1.5px] bg-gray-300' />
             </p>
-            <button className='flex items-center justify-center w-full gap-2 text-sky-800'><FB className='w-9' /> Login with Facebook</button>
+            <button className='flex items-center justify-center w-full gap-2 text-sky-800' onClick={() => signIn('facebook')}><FB className='w-9' /> Login with Facebook</button>
         </div>
     )
 }
