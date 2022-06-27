@@ -2,16 +2,18 @@ import { FC, useState } from "react"
 
 type Props = {
     isLiked: boolean;
-    likesCount: number
+    likesCount: number;
+    postId: number;
 }
 
-const LikeBtn: FC<Props> = ({ isLiked: defaultLike, likesCount: defaultCount }) => {
+const LikeBtn: FC<Props> = ({ isLiked: defaultLike, likesCount: defaultCount, postId }) => {
     const [isLiked, setIsLiked] = useState(defaultLike)
     const [likesCount, setLikesCount] = useState(defaultCount)
 
-    const handleLike = () => {
+    const handleLike = async () => {
         setLikesCount(isLiked ? likesCount - 1 : likesCount + 1)
         setIsLiked(!isLiked)
+        fetch(`/api/posts/${postId}/like`)
     }
 
     return (

@@ -32,7 +32,7 @@ const Post: FC<Props> = ({ post }) => {
             </header>
             <img src={post.image} className="w-full" />
             <div className="flex items-center gap-3 pt-2 px-2">
-                <LikeBtn isLiked={post.likes?.length > 0} likesCount={post._count.likes} />
+                <LikeBtn isLiked={post.likes?.length > 0} likesCount={post._count.likes} postId={post.id} />
             </div>
             <p className="p-2">
                 <span className="font-semibold">{post.owner.username} </span>

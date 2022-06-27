@@ -17,7 +17,7 @@ const updateUsername: NextApiHandler<IResponse> = async (req, res) => {
     const exists = await prisma.user.findUnique({ where: { username: (<string>username).toLowerCase() } })
     if (exists) return res.status(403).json({ message: 'Username already exists' })
 
-    const user = await prisma.user.update({ data: { username }, where: { id: +<string>token.uid }, select: { username: true } })
+    const user = await prisma.user.update({ data: { username }, where: { id: +token.id }, select: { username: true } })
     res.json({ username: <string>user.username })
     
 }

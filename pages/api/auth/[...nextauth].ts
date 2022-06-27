@@ -66,14 +66,14 @@ export default NextAuth({
     session: async ({ session, token }) => {
       if (session?.user) {
 
-        session.user.id = token.uid as number;
+        session.user.id = token.id as number;
         session.user.username = token.username as string;
       }
       return session;
     },
     jwt: async ({ user, token }) => {
       if (user) {
-        token.uid = user.id;
+        token.id = user.id;
         token.username = user.username;
       }
       return token;
