@@ -11,15 +11,17 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   fullname String
-  email    String @unique
-  username String? @unique
-  image String?
+  email    String    @unique
+  username String?   @unique
+  image    String?
   password String?
-  fId Int? @unique
+  fId      Int?      @unique
   posts    Post[]
-  likes Like[]
+  likes    Like[]
+  followers  Follows[] @relation("followers")
+  following  Follows[] @relation("following")
 }
 
 model Post {
@@ -29,15 +31,23 @@ model Post {
   userId    Int
   createdAt DateTime @default(now())
   owner     User     @relation(fields: [userId], references: [id])
-  likes Like[]
+  likes     Like[]
 }
 
 model Like {
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
   postId Int
-  post Post @relation(fields: [postId], references: [id])
+  post   Post @relation(fields: [postId], references: [id])
 
   @@id([userId, postId])
 }
 
+model Follows {
+  followerId Int
+  follower   User @relation("following", fields: [followerId], references: [id])
+  followedId Int
+  followed   User @relation("followers",fields: [followedId], references: [id])
+
+  @@id([followedId, followerId])
+}
