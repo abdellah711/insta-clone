@@ -13,8 +13,20 @@ interface Props {
 
 const User: FC<Props> = ({ user }) => {
     const [isFollowed, setIsFollowed] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const handleFollow: MouseEventHandler = e => setIsFollowed(!isFollowed)
+
+    const handleFollow: MouseEventHandler = async e => {
+        setIsLoading(true)
+        try {
+            const resp = await fetch(`/api/users/${user.id}/follow`)
+            if (resp?.ok) {
+                const { followed } = await resp.json()
+                setIsFollowed(followed)
+            }
+        } catch { }
+        setIsLoading(false)
+    }
 
     return (
         <div className='flex items-center mb-3'>
@@ -29,7 +41,13 @@ const User: FC<Props> = ({ user }) => {
                     </div>
                 </a>
             </Link>
-            <button className={isFollowed ? '':'text-blue-500'} onClick={handleFollow}>{isFollowed ?'Following' : 'Follow'}</button>
+            <button className={isFollowed ? '' : 'text-blue-500'} onClick={handleFollow}>
+                {isLoading ?
+                    <div className="border-2 w-5 aspect-square border-gray-800 rounded-full border-t-transparent animate-spin"/>
+                    :
+                    isFollowed ? 'Following' : 'Follow'
+                }
+            </button>
         </div>
     )
 }
