@@ -1,17 +1,22 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import prisma from 'lib/prisma'
 import { objectToJSON } from 'utils/serialize'
-import Post, { PostWithUser } from 'components/Post/Post'
+import type { PostWithUser } from 'components/Post/Post'
 import { getSession } from 'next-auth/react'
 import { User as IUser } from '@prisma/client'
 import User from 'components/User'
 import { getPosts, getSuggestions } from 'services'
+import { PostsList } from 'components/Post'
 
 const Home: NextPage<Props> = ({ posts, suggestions }) => {
   return (
     <div className='max-w-[800px] mx-auto mt-20 flex gap-7 justify-center px-2'>
       <div className='basis-[450px]'>
-        {posts?.map(post => (<Post post={post} key={post.id} />))}
+        <PostsList posts={posts} />
+      </div>
+      <div className='flex-1 hidden self-start sticky top-20 lg:block'>
+        <h2 className='text-gray-500 mb-4'>Suggestions for you</h2>
+        {suggestions?.map(user => (<User user={user} />))}
       </div>
     </div>
   )

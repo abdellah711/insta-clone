@@ -18,7 +18,7 @@ const Post: FC<Props> = ({ post }) => {
 
 
     return (
-        <article className="max-w-md border border-gray-300 pb-2 rounded mb-6">
+        <article className="max-w-md border border-gray-300 pb-2 rounded mb-6 bg-white">
             <header className="p-2">
                 <Link href={'/profile/'+post.owner.id}>
                     <a className="flex gap-3 items-center cursor-pointer">
