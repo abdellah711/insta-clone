@@ -28,21 +28,23 @@ const Navigation = () => {
                     </a>
                 </Link>
                 <Search />
-                <div className="relative h-full flex gap-3">
+                <div className="h-full flex gap-3">
                     <div className="border-2 border-gray-700 rounded-lg self-center p-1 cursor-pointer" onClick={handlePlusClick}>
-                        <Close className="rotate-45 w-5 fill-gray-700"/>
+                        <Close className="rotate-45 w-5 fill-gray-700" />
                     </div>
-                    <div className="overflow-hidden rounded-full p-0 aspect-square cursor-pointer" onClick={() => setShowMenu(true)}>
-                        {image?.startsWith('/') || !image ?
-                            <Image src={image ?? DefaultImage} width={50} height={50} layout="fixed" placeholder="blur" />
-                            :
-                            <img src={image} className="w-[50px] aspect-square object-cover" />
-                        }
+                    <div className="relative">
+                        <div className="overflow-hidden rounded-full p-0 aspect-square cursor-pointer" onClick={() => setShowMenu(true)}>
+                            {image?.startsWith('/') || !image ?
+                                <Image src={image ?? DefaultImage} width={50} height={50} layout="fixed" placeholder="blur" />
+                                :
+                                <img src={image} className="w-[50px] aspect-square object-cover" />
+                            }
+                        </div>
+                        {showMenu && <Menu onClose={() => setShowMenu(false)} />}
                     </div>
-                    {showMenu && <Menu onClose={() => setShowMenu(false)} />}
                 </div>
             </div>
-            {showModal && <NewPostModal onClose={()=>setShowModal(false)}/>}
+            {showModal && <NewPostModal onClose={() => setShowModal(false)} />}
         </nav>
     )
 }
