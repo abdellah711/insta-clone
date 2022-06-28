@@ -5,7 +5,16 @@ module.exports = {
     './components/**/*.{ts,tsx,js,jsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes:{
+        show: {
+          '0%': {transform: 'scale(1.3)', opacity: .1}
+        }
+      },
+      animation: {
+        show: 'show .3s ease-out'
+      },
+    },
   },
   plugins: [],
 }

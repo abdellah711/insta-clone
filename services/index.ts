@@ -24,8 +24,11 @@ export const getPosts = async (userId: number) => {
         },
         where: {
             userId: {
-                in: followings.map(({ id }) => id)
+                in: [...followings.map(({ id }) => id), userId]
             }
+        },
+        orderBy:{
+            createdAt: 'desc'
         }
     })
 }
