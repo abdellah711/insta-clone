@@ -3,6 +3,8 @@ import { formatRelative } from "utils/relative-time";
 import { FC, useState } from "react"
 import LikeBtn from "./LikeBtn";
 import Link from "next/link";
+import MenuIcon from 'public/assets/icons/3dots.svg'
+
 
 export type PostWithUser = (Post & {
     _count: { likes: number };
@@ -21,16 +23,22 @@ const Post: FC<Props> = ({ post }) => {
 
     return (
         <article className="max-w-md border border-gray-300 pb-2 rounded mb-6 bg-white">
-            <header className="p-2">
+            <header className="p-2 flex">
                 <Link href={'/profile/' + post.owner.id}>
-                    <a className="flex gap-3 items-center cursor-pointer">
+                    <a className="flex gap-3 items-center cursor-pointer flex-1">
                         <img
-                            className="w-10 rounded-full border border-gray-400"
+                            className="w-11 aspect-square overflow-hidden rounded-full border border-gray-400"
                             src={post.owner.image ?? '/assets/images/default-profile.png'}
                         />
-                        {post.owner.fullname}
+                        <div>
+                            <p className="font-semibold">{post.owner.username}</p>
+                            <p className="text-sm text-gray-500">{post.owner.fullname}</p>
+                        </div>
                     </a>
                 </Link>
+                <button className="fill-gray-600 p-1">
+                    <MenuIcon className="w-5" />
+                </button>
             </header>
             <img src={post.image} className="w-full" />
             <div className="flex items-center gap-3 pt-2 px-2">
