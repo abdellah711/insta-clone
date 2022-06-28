@@ -7,8 +7,7 @@ import Menu from "./Menu"
 import { useState } from "react"
 import Close from 'public/assets/icons/close.svg'
 import Link from "next/link"
-import Modal from "components/Modals/Modal"
-import NewPostModal from "components/Modals/NewPostModal"
+import { NewPostModal } from "components/Modals"
 
 const Navigation = () => {
     const [showMenu, setShowMenu] = useState(false)

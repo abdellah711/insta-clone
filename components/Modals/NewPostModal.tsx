@@ -14,6 +14,8 @@ const NewPostModal: FC<Props> = (props) => {
     const [dragging, setDragging] = useState(false)
     const [imageUrl, setImageUrl] = useState<any>('')
     const [message, setMessage] = useState<{ msg: string, error: boolean } | null>(null)
+    const [loading, setLoading] = useState(false)
+
 
     useEffect(() => {
         if (image) {
@@ -45,6 +47,7 @@ const NewPostModal: FC<Props> = (props) => {
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = async e => {
         e.preventDefault()
+        setLoading(true)
         try {
 
             if (image) {
@@ -58,11 +61,13 @@ const NewPostModal: FC<Props> = (props) => {
                 if (resp?.ok) {
                     setMessage({ msg: 'Post shared successfully', error: false })
                     setDescription('')
+                    setLoading(false)
                     setImage(null)
                     return
                 }
             }
         } catch { }
+        setLoading(false)
         setMessage({ msg: 'Something went wrong! Please check your network', error: true })
 
     }
@@ -106,7 +111,9 @@ const NewPostModal: FC<Props> = (props) => {
                 }
 
                 <textarea className="w-4/5 mx-auto border border-gray-300 rounded p-2" placeholder="Description..." value={description} onChange={e => setDescription(e.currentTarget.value)} required />
-                <button className="self-end bg-sky-500 text-white py-1 px-6 rounded m-2 disabled:bg-sky-200" disabled={!imageUrl || description.length === 0}>Post</button>
+                <button className="self-end bg-sky-500 text-white py-1 px-6 rounded m-2 disabled:bg-sky-200" disabled={!imageUrl || description.length === 0 || loading}>
+                    {!loading ? 'Post': (<div className="border-[3px] w-6 aspect-square border-blue-600/20 border-t-sky-400 rounded-full animate-spin mx-2"/>)}
+                </button>
             </form>
 
         </Modal>
