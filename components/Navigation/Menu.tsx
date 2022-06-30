@@ -5,20 +5,21 @@ import { FC } from "react"
 
 interface Props {
     onClose?: () => void;
+    userId?: number | string;
 }
 
-const Menu: FC<Props> = ({ onClose }) => {
+const Menu: FC<Props> = ({ onClose, userId }) => {
     const itemClasses = 'whitespace-nowrap p-2 hover:bg-gray-600/10 rounded text-start'
     return (
         <>
             <div className="fixed inset-0" onClick={() => onClose?.()} />
             <div className="absolute mt-3 right-1 border shadow-md min-w-[400px] rounded bg-white flex flex-col gap-1 p-1">
-                <Link href="/profile">
+                <Link href={userId ? "/profile/" + userId : '#'}>
                     <a className={itemClasses}>Profile</a>
                 </Link>
                 <hr />
 
-                <button className={itemClasses} onClick={()=> signOut()}>Log out</button>
+                <button className={itemClasses} onClick={() => signOut()}>Log out</button>
 
 
                 {/* top triangle */}

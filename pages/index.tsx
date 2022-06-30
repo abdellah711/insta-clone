@@ -10,7 +10,7 @@ import { PostsList } from 'components/Post'
 
 const Home: NextPage<Props> = ({ posts, suggestions }) => {
   return (
-    <div className='max-w-[800px] mx-auto mt-20 flex gap-7 justify-center px-2'>
+    <div className='max-w-4xl mx-auto mt-20 flex gap-7 justify-center px-2'>
       <div className='basis-[450px]'>
         <PostsList posts={posts} />
       </div>
