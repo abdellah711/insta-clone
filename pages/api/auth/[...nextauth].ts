@@ -27,8 +27,13 @@ export default NextAuth({
     Facebook({
       clientId: <string>process.env.FB_CLIENT_ID,
       clientSecret: <string>process.env.FB_SECRET,
-      async profile(profile) {
-        console.log(JSON.stringify({ profile }))
+      userinfo: {
+        url: "https://graph.facebook.com/me",
+        params: {
+          fields: "id,name,email,picture.type(large)",
+        }
+      },
+      async profile(profile, tokens) {
 
         let user = await prisma.user.findUnique({ where: { fId: +profile.id } })
 
@@ -39,14 +44,22 @@ export default NextAuth({
               const resp = await fetch(image)
               if (resp?.ok) {
                 const buffer = Buffer.from(await resp.arrayBuffer())
-                const im = `./public/images/users/${profile.id}-${Date.now()}.jfif`
-                fs.createWriteStream(im).write(buffer)
+                const im = `/assets/images/users/${profile.id}-${Date.now()}.jfif`
+                fs.createWriteStream('./public' + im).write(buffer)
                 image = im
               }
             } catch { }
           }
-          user = await prisma.user.create({
-            data: {
+          const condition = profile.email ? { email: profile.email } : { fId: +profile.id }
+          user = await prisma.user.upsert({
+            where: condition,
+            create: {
+              email: profile.email,
+              fullname: profile.name,
+              image,
+              fId: +profile.id,
+            },
+            update: {
               email: profile.email,
               fullname: profile.name,
               image,
@@ -66,7 +79,7 @@ export default NextAuth({
     session: async ({ session, token }) => {
       if (session?.user) {
 
-        session.user.id = token.id as number;
+        session.user.id = +token.id;
         session.user.username = token.username as string;
       }
       return session;
