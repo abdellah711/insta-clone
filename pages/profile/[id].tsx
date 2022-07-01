@@ -1,31 +1,24 @@
-import Header from "components/Profile/Header"
 import type { GetServerSideProps, NextPage } from "next"
 import prisma from "lib/prisma"
-import { User } from "@prisma/client"
 import { getSession } from "next-auth/react"
+import Profile from "components/Profile"
+import type { UserProfile } from "components/Profile"
+import { Post } from "@prisma/client"
+import { objectToJSON } from "utils/serialize"
 
-const profile: NextPage<Props> = ({ user }) => {
+const profile: NextPage<Props> = ({ user, posts }) => {
     return (
         <div className="mt-20">
-            <div className="max-w-4xl mx-auto">
-                <Header user={user} />
-            </div>
+            <Profile user={user} posts={posts} />
         </div>
     )
 }
 
 
 interface Props {
-    user: Omit<User, 'password' | 'fId'> & {
-        followers: {
-            followerId: number;
-        }[];
-        _count: {
-            followers: number;
-            following: number;
-            posts: number;
-        };
-    };
+    user: UserProfile,
+    posts: (Post & { _count: { likes: number; } })[],
+
 }
 
 
@@ -39,15 +32,17 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         where: { id: +id },
         include: {
             _count: { select: { followers: true, following: true, posts: true } },
-            followers: { where: { followerId: +session?.user.id! }, select: { followerId: true } }
+            followers: { where: { followerId: +session?.user.id! }, select: { followerId: true } },
+            posts: { include: { _count: { select: { likes: true } } } }
         }
     })
 
     if (!user) return { redirect: { destination: '/', permanent: false } }
-    const { password, fId, ...rest } = user
+    const { password, fId, posts, ...rest } = user
     return {
         props: {
-            user: rest
+            user: rest,
+            posts: objectToJSON(posts)
         }
     }
 }
