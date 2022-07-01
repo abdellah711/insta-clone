@@ -6,3 +6,11 @@
 body {
     background-color: #fafafa;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+    width: 0;
+}
+/* for firefox */
+.no-scrollbar{
+    scrollbar-width: 0;
+}

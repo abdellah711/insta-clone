@@ -1,32 +1,49 @@
 import type { Post } from "@prisma/client"
 import Image from "next/image"
-import { FC } from "react"
+import { FC, useState } from "react"
 import CameraIcon from 'public/assets/icons/camera.svg'
-
+import PostDetailsModal from "components/Modals/PostDetailsModal"
+import { PostWithUser } from "types/post"
 
 interface Props {
-    posts: (Post & { _count: { likes: number; } })[]
+    posts: PostWithUser[]
 }
 
 const Posts: FC<Props> = ({ posts }) => {
+    const [selectedPost, setSelectedPost] = useState<PostWithUser | null>(null)
+
+    const handleClick = (post: PostWithUser) => {
+        setSelectedPost(post)
+    }
+
     return (
-        <div className="grid grid-cols-3 gap-9 mt-10 border-t border-t-gray-300/70 pt-10">
-            {posts.length > 0 ?
-                posts.map(p => <Post post={p} key={p.id} />)
-                :
-                <div className="flex flex-col items-center justify-center col-span-3 gap-2 min-h-[50vh]">
-                    <CameraIcon className="fill-transparent stroke-current stroke-[30] w-20" />
-                    <p className="font-light text-3xl">No posts yet</p>
-                </div>
-            }
-        </div>
+        <>
+            <div className="grid grid-cols-2 md:grid-cols-3 px-2 gap-4 lg:gap-9 mt-10 border-t border-t-gray-300/70 pt-10">
+                {posts.length > 0 ?
+                    posts.map(p => <Post post={p} key={p.id} onClick={() => handleClick(p)}/>)
+                    :
+                    <div className="flex flex-col items-center justify-center col-span-3 gap-2 min-h-[50vh]">
+                        <CameraIcon className="fill-transparent stroke-current stroke-[30] w-20" />
+                        <p className="font-light text-3xl">No posts yet</p>
+                    </div>
+                }
+            </div>
+            <PostDetailsModal post={selectedPost} onClose={()=>setSelectedPost(null)}/>
+        </>
     )
 }
 
-const Post: FC<{ post: Post & { _count: { likes: number; } } }> = ({ post }) => {
+interface PostProps {
+    post: PostWithUser;
+    onClick: () => void;
+}
+
+const Post: FC<PostProps> = ({ post, onClick }) => {
+
+
     return (
-        <div className="overflow-hidden rounded relative group cursor-pointer">
-            <Image src={post.image} layout="responsive" width={400} height={400} sizes="(max-width: 896px) 30vw; 350px" />
+        <div className="overflow-hidden rounded relative group cursor-pointer" onClick={onClick}>
+            <Image src={post.image} layout="responsive" width={400} height={400} sizes="(max-width: 896px) 30vw; 350px" objectFit="cover" />
             <div className="absolute inset-0 flex justify-center items-center gap-3 bg-gray-900/10 transition duration-150 opacity-0 group-hover:opacity-100">
                 <svg
                     className="w-8 fill-white"

@@ -1,1 +1,5 @@
 export { default as PostsList } from './PostsList'
+export {default as PostHeader} from './PostHeader'
+export {default as PostContent} from './PostContent'
+export {default as LikeBtn} from './LikeBtn'
+export {default as Post} from './Post'

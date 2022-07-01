@@ -20,7 +20,7 @@ export const getPosts = async (userId: number) => {
         include: {
             owner: { select: { fullname: true, username: true, image: true, id: true } },
             _count: true,
-            likes: { where: { userId: userId } }
+            likes: { where: { userId } }
         },
         where: {
             userId: {

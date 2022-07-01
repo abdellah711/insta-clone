@@ -3,8 +3,8 @@ import prisma from "lib/prisma"
 import { getSession } from "next-auth/react"
 import Profile from "components/Profile"
 import type { UserProfile } from "components/Profile"
-import { Post } from "@prisma/client"
 import { objectToJSON } from "utils/serialize"
+import { PostWithUser } from "types/post"
 
 const profile: NextPage<Props> = ({ user, posts }) => {
     return (
@@ -17,7 +17,7 @@ const profile: NextPage<Props> = ({ user, posts }) => {
 
 interface Props {
     user: UserProfile,
-    posts: (Post & { _count: { likes: number; } })[],
+    posts: PostWithUser[],
 
 }
 
@@ -33,7 +33,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         include: {
             _count: { select: { followers: true, following: true, posts: true } },
             followers: { where: { followerId: +session?.user.id! }, select: { followerId: true } },
-            posts: { include: { _count: { select: { likes: true } } } }
+            posts: {
+                include: {
+                    _count: { select: { likes: true } },
+                    owner: {
+                        select: { fullname: true, username: true, image: true, id: true }
+                    },
+                    likes: {where: {userId: +session?.user.id!}}
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            }
         }
     })
 

@@ -17,7 +17,7 @@ const LikeBtn: FC<Props> = ({ isLiked: defaultLike, likesCount: defaultCount, po
     }
 
     return (
-        <>
+        <div className="flex items-center gap-3 pt-2 px-2">
             <button onClick={handleLike}>
                 <svg
                     className={"w-8 cursor-pointer " + (isLiked ? "stroke-red-500 fill-red-500" : "fill-transparent stroke-black")}
@@ -27,7 +27,7 @@ const LikeBtn: FC<Props> = ({ isLiked: defaultLike, likesCount: defaultCount, po
                 </svg>
             </button>
             <p className="font-semibold">{likesCount} {likesCount === 1 ? 'like' : 'likes'}</p>
-        </>
+        </div>
     )
 }
 

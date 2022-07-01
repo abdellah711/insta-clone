@@ -1,22 +1,14 @@
-import type { Post, User } from "@prisma/client";
 import { FC } from "react"
+import { PostWithUser } from "types/post";
+import { UserProfile } from "types/user";
 import Header from "./Header";
 import Posts from "./Posts";
 
-export type UserProfile = Omit<User, 'password' | 'fId'> & {
-    followers: {
-        followerId: number;
-    }[];
-    _count: {
-        followers: number;
-        following: number;
-        posts: number;
-    };
-};
+
 
 interface Props {
     user: UserProfile;
-    posts: (Post & { _count: { likes: number; } })[];
+    posts: PostWithUser[];
 }
 
 const Profile: FC<Props> = ({ user, posts }) => {
