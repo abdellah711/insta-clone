@@ -15,7 +15,7 @@ const Menu: FC<Props> = ({ onClose, userId }) => {
             <div className="fixed inset-0" onClick={() => onClose?.()} />
             <div className="absolute mt-3 right-1 border shadow-md min-w-[400px] rounded bg-white flex flex-col gap-1 p-1">
                 <Link href={userId ? "/profile/" + userId : '#'}>
-                    <a className={itemClasses}>Profile</a>
+                    <a className={itemClasses} onClick={onClose}>Profile</a>
                 </Link>
                 <hr />
 

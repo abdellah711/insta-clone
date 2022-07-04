@@ -2,9 +2,9 @@ import type { GetServerSideProps, NextPage } from "next"
 import prisma from "lib/prisma"
 import { getSession } from "next-auth/react"
 import Profile from "components/Profile"
-import type { UserProfile } from "components/Profile"
 import { objectToJSON } from "utils/serialize"
 import { PostWithUser } from "types/post"
+import { UserProfile } from "types/user"
 
 const profile: NextPage<Props> = ({ user, posts }) => {
     return (

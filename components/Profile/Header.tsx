@@ -1,8 +1,8 @@
 import { FC, useState } from "react"
 import Image from 'next/image'
 import DefaultImage from 'public/assets/images/default-profile.png'
-import type { UserProfile } from "./Profile"
 import { useSession } from "next-auth/react"
+import { UserProfile } from "types/user"
 
 interface Props {
     user: UserProfile

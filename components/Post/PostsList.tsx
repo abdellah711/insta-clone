@@ -1,5 +1,5 @@
 import { FC } from "react"
-import type { PostWithUser } from './Post'
+import { PostWithUser } from "types/post";
 import Post from "./Post";
 
 interface Props {
