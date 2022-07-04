@@ -14,7 +14,7 @@ const Home: NextPage<Props> = ({ posts, suggestions }) => {
       <div className='basis-[450px]'>
         <PostsList posts={posts} />
       </div>
-      <div className='flex-1 hidden self-start sticky top-20 lg:block'>
+      <div className='flex-1 hidden self-start sticky top-20 lg:block' role="suggestions">
         <h2 className='text-gray-500 mb-4'>Suggestions for you</h2>
         {suggestions?.map(user => (<User user={user} key={user.id}/>))}
       </div>

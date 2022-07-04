@@ -4,6 +4,7 @@ import { LikeBtn, Post, PostContent, PostHeader } from '../Post'
 import { PostWithUser } from "types/post"
 import Image from "next/image";
 import { formatRelative } from "utils/relative-time";
+import PostTime from "components/Post/PostTime";
 
 interface Props {
     post?: PostWithUser | null;
@@ -23,7 +24,7 @@ const PostDetailsModal: FC<Props> = ({ post, onClose }) => {
                         <PostContent username={post.owner.username} content={post.content} showMore={false}/>
                     </div>
                     <LikeBtn likesCount={post._count.likes} isLiked={post.likes.length > 0} postId={post.id} />
-                    <p className="uppercase text-xs text-gray-500 p-2 -mt-1">{formatRelative(post.createdAt)}</p>
+                    <PostTime time={post.createdAt}/>
                 </div>
             </div>
         </Modal>

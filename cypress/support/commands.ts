@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+
+import { signIn } from "next-auth/react"
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -25,15 +28,24 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+declare global {
+    namespace Cypress {
+        interface Chainable {
+            login(email?: string, password?: string): Chainable<void>
+            //   drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+            //   dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+            //   visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
+        }
+    }
+}
 
-export {}
+Cypress.Commands.add('login', (email = 'cy@test.com', password = 'cypress') => {
+    cy.wrap(signIn('credentials', {
+        email,
+        password,
+        redirect: false
+    }))
+    cy.visit('/')
+})
+
+export { }

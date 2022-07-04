@@ -62,7 +62,25 @@ const users = [
                 image: "/assets/images/test/post3.jpg",
             },
         ]
-    }
+    },
+    {
+        user: {
+            email: 'cy@test.com',
+            fullname: 'cypress test',
+            username: 'cypress',
+            password: bcrypt.hashSync('cypress', bcrypt.genSaltSync())
+        },
+        posts: [
+            {
+                content: "Hello world",
+                image: "/assets/images/test/post2.jpg",
+            },
+            {
+                content: "Hello world again!",
+                image: "/assets/images/test/post1.jpg",
+            },
+        ]
+    },
 
 ]
 

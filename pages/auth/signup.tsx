@@ -17,11 +17,11 @@ const Signup = () => {
     //used to validate the username and the email
     const handleBlur: FocusEventHandler<HTMLInputElement> = async (e) => {
         const fieldName = e.currentTarget.name as 'email' | 'username'
-        if (formData[fieldName] === '') {
+        if (formData[fieldName] === '' || (fieldName === 'email' && !formData.email.includes('@'))) {
             setValideData(data => ({ ...data, [fieldName]: false }))
             return
         }
-
+        
         const resp = await fetch(`/api/auth/exist?${fieldName}=${encodeURIComponent(formData[fieldName])}`)
         if (resp.ok) {
             const { exists } = await resp.json()

@@ -17,7 +17,7 @@ const AuthForm: FC<Props> = ({ children, onSubmit, disabled = false, submitTxt, 
 
             <form className='flex flex-col gap-3' onSubmit={onSubmit}>
                 <div className='mx-auto'>
-                    <Image src={'/assets/images/logo.png'} width={175} height={51} layout="fixed" alt='instagram logo' />
+                    <Image src={'/assets/images/logo.png'} width={175} height={51} layout="fixed" alt='instagram logo' priority/>
                 </div>
                 {error && <p className="text-red-500 border border-red-500 py-2 px-3 rounded-sm bg-red-50">{error}</p>}
                 {children}
