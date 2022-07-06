@@ -29,13 +29,13 @@ describe('Authentication', () => {
 
   })
 
-  it.skip('redirect logged in users', () => {
+  it('redirect logged in users', () => {
     cy.login()
     cy.visit('/auth/login')
     cy.location('pathname').should('eq', '/')
   })
 
-  it.skip('doesn\'t allow duplicate username or email', () => {
+  it('doesn\'t allow duplicate username or email', () => {
     cy.visit('/auth/signup')
     cy.get('[name=username]').type('cypress').blur().get('svg[data-name=error-icon]').should('be.visible')
     
@@ -43,7 +43,7 @@ describe('Authentication', () => {
     
   })
   
-  it.skip('doesn\'t allow empty username or email', () => {
+  it('doesn\'t allow empty username or email', () => {
     cy.visit('/auth/signup')
     cy.get('[name=username]').focus().blur().get('svg[data-name=error-icon]').should('be.visible')
     

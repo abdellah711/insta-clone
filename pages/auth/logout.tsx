@@ -3,7 +3,7 @@ import { signOut, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useEffect, useRef } from "react"
 
-const logout: NextPage = ({ }) => {
+const Logout: NextPage = ({ }) => {
     const { status } = useSession()
     const router = useRouter()
     const isLogingOut = useRef(false)
@@ -23,4 +23,4 @@ const logout: NextPage = ({ }) => {
     )
 }
 
-export default logout
+export default Logout

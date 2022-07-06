@@ -1,4 +1,3 @@
-import type { Post } from "@prisma/client"
 import Image from "next/image"
 import { FC, useState } from "react"
 import CameraIcon from 'public/assets/icons/camera.svg'
