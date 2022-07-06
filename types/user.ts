@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 
-export type UserProfile = Omit<User, 'password' | 'fId'> & {
+export type UserProfile = UserPublicInfo & {
     followers: {
         followerId: number;
     }[];
@@ -10,3 +10,5 @@ export type UserProfile = Omit<User, 'password' | 'fId'> & {
         posts: number;
     };
 };
+
+export type UserPublicInfo = Omit<User, 'password' | 'fId' | 'email'>

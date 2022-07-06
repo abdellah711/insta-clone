@@ -1,10 +1,11 @@
-import type { User as IUser } from "@prisma/client"
 import Link from "next/link"
 
 import { FC, MouseEventHandler, useState } from "react"
 
+import { UserPublicInfo } from "types/user";
+
 interface Props {
-    user: IUser;
+    user: UserPublicInfo;
 }
 
 const Suggestion: FC<Props> = ({ user }) => {

@@ -1,11 +1,11 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import { objectToJSON } from 'utils/serialize'
 import { getSession } from 'next-auth/react'
-import { User as IUser } from '@prisma/client'
 import { getPosts, getSuggestions, getUser } from 'services'
 import { PostsList } from 'components/Post'
 import { PostWithUser } from 'types/post'
 import Sidebar from 'components/Sidebar/Sidebar'
+import { UserPublicInfo } from 'types/user'
 
 
 const Home: NextPage<Props> = ({ posts, suggestions, user }) => {
@@ -22,8 +22,8 @@ const Home: NextPage<Props> = ({ posts, suggestions, user }) => {
 
 interface Props {
   posts: PostWithUser[]
-  suggestions: IUser[]
-  user: IUser
+  suggestions: UserPublicInfo[]
+  user: UserPublicInfo
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {

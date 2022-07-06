@@ -1,15 +1,15 @@
 import { FC } from "react"
-import type { User as IUser } from '@prisma/client'
 import Link from "next/link"
 import Image from 'next/image'
 import DefaultImage from 'public/assets/images/default-profile.png'
 import Suggestion from './Suggestion'
 import { signOut } from "next-auth/react"
+import { UserPublicInfo } from "types/user"
 
 
 interface Props {
-    user: IUser,
-    suggestions: IUser[]
+    user: UserPublicInfo,
+    suggestions: UserPublicInfo[]
 }
 
 const Sidebar: FC<Props> = ({ user, suggestions }) => {
@@ -22,7 +22,7 @@ const Sidebar: FC<Props> = ({ user, suggestions }) => {
                 <Image src={user.image ?? DefaultImage} width={60} height={60} />
               </div>
               <div className='flex flex-col'>
-                <h2 className='font-medium group-active:text-gray-600'>{user.username}</h2>
+                <h2 className='font-medium group-active:text-gray-600 leading-5'>{user.username}</h2>
                 <p className='capitalize text-gray-500 font-normal'>{user.fullname}</p>
               </div>
             </a>
