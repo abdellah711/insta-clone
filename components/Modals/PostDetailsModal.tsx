@@ -18,7 +18,7 @@ const PostDetailsModal: FC<Props> = ({ post, onClose }) => {
                 <div className="relative flex-1 bg-black h-[60vh] sm:h-[80vh] basis-72">
                     <Image src={post.image} layout="fill" objectFit="contain" />
                 </div>
-                <div className="flex-1 basis-48 flex flex-col sm:h-[80vh] relative gap-2 pb-2">
+                <div className="flex-1 basis-48 flex flex-col sm:h-[80vh] relative gap-2 p-2">
                     <PostHeader owner={post.owner} />
                     <div className="hidden sm:block overflow-auto no-scrollbar" >
                         <PostContent username={post.owner.username} content={post.content} showMore={false}/>

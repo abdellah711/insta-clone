@@ -54,3 +54,7 @@ export const getSuggestions = (userId: number) => {
         }
     })
 }
+
+export const getUser = async (id: number) => {
+    return await prisma.user.findUnique({ where: { id } })
+}
