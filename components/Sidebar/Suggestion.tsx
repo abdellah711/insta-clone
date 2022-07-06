@@ -3,15 +3,11 @@ import Link from "next/link"
 
 import { FC, MouseEventHandler, useState } from "react"
 
-interface UserWithIsFollowed {
-
-}
-
 interface Props {
     user: IUser;
 }
 
-const User: FC<Props> = ({ user }) => {
+const Suggestion: FC<Props> = ({ user }) => {
     const [isFollowed, setIsFollowed] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -52,4 +48,4 @@ const User: FC<Props> = ({ user }) => {
     )
 }
 
-export default User
+export default Suggestion

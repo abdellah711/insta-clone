@@ -1,15 +1,11 @@
 import type { GetServerSideProps, NextPage } from 'next'
-import prisma from 'lib/prisma'
 import { objectToJSON } from 'utils/serialize'
-import { getSession, signOut } from 'next-auth/react'
+import { getSession } from 'next-auth/react'
 import { User as IUser } from '@prisma/client'
-import User from 'components/User'
 import { getPosts, getSuggestions, getUser } from 'services'
 import { PostsList } from 'components/Post'
 import { PostWithUser } from 'types/post'
-import Image from 'next/image'
-import DefaultImage from 'public/assets/images/default-profile.png'
-import Link from 'next/link'
+import Sidebar from 'components/Sidebar/Sidebar'
 
 
 const Home: NextPage<Props> = ({ posts, suggestions, user }) => {
@@ -18,26 +14,7 @@ const Home: NextPage<Props> = ({ posts, suggestions, user }) => {
       <div className='basis-[450px]'>
         <PostsList posts={posts} />
       </div>
-      <div className='flex-1 hidden self-start sticky top-20 lg:block'>
-        <div className='flex mb-5 mt-2'>
-          <Link href={'/profile/'+user.id}>
-            <a className='flex items-center gap-4 flex-1 group'>
-              <div className='overflow-hidden rounded-full w-fit aspect-square'>
-                <Image src={user.image ?? DefaultImage} width={60} height={60} />
-              </div>
-              <div className='flex flex-col'>
-                <h2 className='font-medium group-active:text-gray-600'>{user.username}</h2>
-                <p className='capitalize text-gray-500 font-normal'>{user.fullname}</p>
-              </div>
-            </a>
-          </Link>
-          <button className='text-blue-500' onClick={()=> signOut()}>Log out</button>
-        </div>
-        <div role="suggestions">
-          <h2 className='text-gray-700/70 mb-4'>Suggestions for you</h2>
-          {suggestions?.map(user => (<User user={user} key={user.id} />))}
-        </div>
-      </div>
+      <Sidebar suggestions={suggestions} user={user} />
     </div>
   )
 }
