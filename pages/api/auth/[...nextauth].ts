@@ -55,13 +55,13 @@ export default NextAuth({
             where: condition,
             create: {
               email: profile.email,
-              fullname: profile.name,
+              fullname: profile.name.toLowerCase(),
               image,
               fId: +profile.id,
             },
             update: {
               email: profile.email,
-              fullname: profile.name,
+              fullname: profile.name.toLowerCase(),
               image,
               fId: +profile.id,
             }

@@ -12,7 +12,7 @@ interface Props {
 
 const SearchItem: FC<Props> = ({ user, onClick }) => {
     return (
-        <div className="p-2 hover:bg-gray-100">
+        <li className="p-2 hover:bg-gray-100">
             <Link href={'/profile/' + user.id}>
                 <a className="flex gap-3 items-center" onClick={onClick}>
                     <div className="overflow-hidden rounded-full aspect-square w-fit">
@@ -24,7 +24,7 @@ const SearchItem: FC<Props> = ({ user, onClick }) => {
                     </div>
                 </a>
             </Link>
-        </div>
+        </li>
     )
 }
 

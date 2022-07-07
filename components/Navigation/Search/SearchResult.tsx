@@ -68,7 +68,9 @@ const SearchResult: FC<Props> = ({ loading, data, error, onItemClick }) => {
 
 const SearchResultContainer: FC<{ children: ReactNode[] | ReactNode }> = ({ children }) => {
     return (
-        <div className='absolute top-14 left-1/2 -translate-x-1/2 w-[min(90vw,500px)] bg-white shadow-lg rounded-md border border-gray-200 h-[40vh]'>
+        <div className='absolute top-14 left-1/2 -translate-x-1/2 w-[min(90vw,500px)] bg-white shadow-lg rounded-md border border-gray-200 h-[40vh]'
+            aria-label="search result"
+        >
             {children}
         </div>
     )
