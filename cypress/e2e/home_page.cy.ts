@@ -32,12 +32,15 @@ describe('Home page', () => {
     })
 
     describe('Search', () => {
-        it('allows user to look for people to follow', () => {
-            cy.get('[aria-label="Search input"]').type('test')
-            
-            cy.get('[aria-label="search result"]').find('li').should('have.length',1)
-            .first().contains(/test/i)
-        
+
+        const search = (query: string = "test") => cy.get('[aria-label="Search input"]').type(query)
+
+        const getSearchResult = () => cy.get('[aria-label="search result"]').find('li')
+
+        it.skip('allows user to look for people to follow', () => {
+            search()
+
+            getSearchResult().should('have.length',2).first().contains(/test/i)
             
         })
 
@@ -45,7 +48,7 @@ describe('Home page', () => {
             cy.intercept('/api/users?search=*', (req) => {
                 req.destroy()
             })
-            cy.get('[aria-label="Search input"]').type('test')
+            search()
             
             cy.get('[aria-label="search result"]').contains('p', /something went wrong/i).should('exist')
         })
@@ -53,9 +56,30 @@ describe('Home page', () => {
         
         it.skip('makes only one request per search', () => {
             cy.intercept('/api/users?search=*',cy.spy().as('searchRequest'))
-            cy.get('[aria-label="Search input"]').type('test').wait(200).type('test')
-
+            search().wait(200).type('test')
+            
             cy.get('@searchRequest').should('have.callCount',1)  
+        })
+        
+        it('saves users recent searches in localstorage', () => {
+            search()
+            getSearchResult().first().click()
+            cy.get('[aria-label="Search input"]').focus()
+            getSearchResult().first().contains(/test/i)
+            getSearchResult().first().find('svg').click()
+            cy.get('[aria-label="search result"]').contains('p',/no recent searches/i)
+        })
+        
+        it('allows user to clear all recent searches', () => {
+            search()
+            getSearchResult().first().click()
+            search('alaoui')
+            getSearchResult().first().click()
+            cy.get('[aria-label="Search input"]').focus()
+            getSearchResult().should('have.length',2)
+            cy.contains('button',/clear all/i).click().should(()=>{
+                expect(localStorage.getItem('recent')).to.eq('[]')
+            })
         })
 
 
