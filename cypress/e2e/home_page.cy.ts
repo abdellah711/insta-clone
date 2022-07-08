@@ -37,14 +37,14 @@ describe('Home page', () => {
 
         const getSearchResult = () => cy.get('[aria-label="search result"]').find('li')
 
-        it.skip('allows user to look for people to follow', () => {
+        it('allows user to look for people to follow', () => {
             search()
 
             getSearchResult().should('have.length',2).first().contains(/test/i)
             
         })
 
-        it.skip('shows error if something went wrong', () => {
+        it('shows error if something went wrong', () => {
             cy.intercept('/api/users?search=*', (req) => {
                 req.destroy()
             })
@@ -54,7 +54,7 @@ describe('Home page', () => {
         })
         
         
-        it.skip('makes only one request per search', () => {
+        it('makes only one request per search', () => {
             cy.intercept('/api/users?search=*',cy.spy().as('searchRequest'))
             search().wait(200).type('test')
             

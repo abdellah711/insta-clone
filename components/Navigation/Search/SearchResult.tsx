@@ -1,4 +1,5 @@
-import { FC, ReactNode, useEffect, useState } from "react"
+import useRecentSearches from "hooks/useRecentSearches";
+import { FC, ReactNode } from "react"
 import { UserPublicInfo } from "types/user"
 import SearchItem from "./SearchItem"
 
@@ -10,10 +11,7 @@ interface Props {
 }
 
 const SearchResult: FC<Props> = ({ loading, data, error, onItemClick }) => {
-    const [recentSearchs, setRecentSearchs] = useState<UserPublicInfo[]>(() => JSON.parse(localStorage.getItem('recent') ?? "[]"))
-
-
-
+    const { recentSearches, add, remove, clear } = useRecentSearches()
 
     if (loading) {
         return (
@@ -34,21 +32,8 @@ const SearchResult: FC<Props> = ({ loading, data, error, onItemClick }) => {
     }
 
     const handleClick = (user: UserPublicInfo) => {
-        const newRecents = [user, ...recentSearchs.filter(u => u.id !== user.id)].slice(0,5)
-        localStorage.setItem('recent', JSON.stringify(newRecents))
-        setRecentSearchs(newRecents)
+        add(user)
         onItemClick()
-    }
-    
-    const handleRecentRemove = (user: UserPublicInfo) => {
-        const newRecents = recentSearchs.filter(u => u.id !== user.id)
-        localStorage.setItem('recent', JSON.stringify(newRecents))
-        setRecentSearchs(newRecents)
-    }
-    
-    const handleClear = () => {
-        localStorage.setItem('recent', JSON.stringify([]))
-        setRecentSearchs([])
     }
 
     return (
@@ -67,12 +52,14 @@ const SearchResult: FC<Props> = ({ loading, data, error, onItemClick }) => {
                 <div className="flex flex-col h-full">
                     <div className="flex justify-between py-2 px-4">
                         <h2 className="font-semibold">Recent</h2>
-                        {recentSearchs.length > 0 && <button className="text-blue-500" onClick={handleClear}>Clear all</button>}
+                        {recentSearches.length > 0 && (<button className="text-blue-500" onClick={clear}>Clear all</button>)}
                     </div>
                     {
-                        recentSearchs.length > 0 ?
+                        recentSearches.length > 0 ?
                             (<ul className="overflow-auto list-none">
-                                {recentSearchs.map(user => <SearchItem key={user.id} user={user} onClick={onItemClick} onRemove={() => handleRecentRemove(user)} />)}
+                                {recentSearches.map(user => (
+                                    <SearchItem key={user.id} user={user} onClick={onItemClick} onRemove={() => remove(user)} />
+                                ))}
                             </ul>)
                             :
                             <Empty text="No recent searches" />
