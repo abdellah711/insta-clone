@@ -17,10 +17,10 @@ const handler: NextApiHandler<IResponse> = async (req, res) => {
     try {
         const data = await prisma.user.findMany({
             where: {
-                OR: {
-                    fullname: { contains: search },
-                    username: { contains: search }
-                }
+                OR: [
+                    {fullname: { contains: search }},
+                    {username: { contains: search }}
+                ]
             },
             select: { username: true, image: true, fullname: true, id: true }
         })

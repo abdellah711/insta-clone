@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react"
+import { FC, ReactNode, useEffect, useState } from "react"
 import { UserPublicInfo } from "types/user"
 import SearchItem from "./SearchItem"
 
@@ -10,6 +10,10 @@ interface Props {
 }
 
 const SearchResult: FC<Props> = ({ loading, data, error, onItemClick }) => {
+    const [recentSearchs, setRecentSearchs] = useState<UserPublicInfo[]>(() => JSON.parse(localStorage.getItem('recent') ?? "[]"))
+
+
+
 
     if (loading) {
         return (
@@ -29,27 +33,50 @@ const SearchResult: FC<Props> = ({ loading, data, error, onItemClick }) => {
         )
     }
 
+    const handleClick = (user: UserPublicInfo) => {
+        const newRecents = [user, ...recentSearchs.filter(u => u.id !== user.id)].slice(0,5)
+        localStorage.setItem('recent', JSON.stringify(newRecents))
+        setRecentSearchs(newRecents)
+        onItemClick()
+    }
+    
+    const handleRecentRemove = (user: UserPublicInfo) => {
+        const newRecents = recentSearchs.filter(u => u.id !== user.id)
+        localStorage.setItem('recent', JSON.stringify(newRecents))
+        setRecentSearchs(newRecents)
+    }
+    
+    const handleClear = () => {
+        localStorage.setItem('recent', JSON.stringify([]))
+        setRecentSearchs([])
+    }
+
     return (
         <SearchResultContainer>
 
             {data ?
                 /* Search Result */
                 (data.length > 0 ? <ul className="overflow-auto flex-1 max-h-full list-none">
-                    {data.map(user => (<SearchItem key={user.id} user={user} onClick={onItemClick} />))}
+                    {data.map(user => (<SearchItem key={user.id} user={user} onClick={() => handleClick(user)} />))}
                 </ul>
                     :
                     <Empty text="No result" />
                 )
                 :
                 /* Recent */
-                <div className="flex flex-col max-h-full">
+                <div className="flex flex-col h-full">
                     <div className="flex justify-between py-2 px-4">
                         <h2 className="font-semibold">Recent</h2>
-                        <button className="text-blue-500">Clear all</button>
+                        {recentSearchs.length > 0 && <button className="text-blue-500" onClick={handleClear}>Clear all</button>}
                     </div>
-                    <ul className="overflow-auto list-none">
-
-                    </ul>
+                    {
+                        recentSearchs.length > 0 ?
+                            (<ul className="overflow-auto list-none">
+                                {recentSearchs.map(user => <SearchItem key={user.id} user={user} onClick={onItemClick} onRemove={() => handleRecentRemove(user)} />)}
+                            </ul>)
+                            :
+                            <Empty text="No recent searches" />
+                    }
                 </div>
             }
 
@@ -79,7 +106,7 @@ const SearchResultContainer: FC<{ children: ReactNode[] | ReactNode }> = ({ chil
 
 const Empty: FC<{ text: string }> = ({ text }) => {
     return (
-        <div className="h-full grid place-items-center">
+        <div className="h-full grid place-items-center flex-1">
             <p className="text-gray-600">{text}</p>
         </div>
     )
