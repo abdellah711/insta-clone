@@ -5,10 +5,12 @@ import { useSession } from "next-auth/react"
 import { UserProfile } from "types/user"
 
 interface Props {
-    user: UserProfile
+    user: UserProfile,
+    onFollowersClick?: () => void;
+    onFollowingClick?: () => void;
 }
 
-const Header: FC<Props> = ({ user }) => {
+const Header: FC<Props> = ({ user, onFollowersClick, onFollowingClick }) => {
     const [isFollowed, setIsFollowed] = useState(user.followers.length > 0)
     const [isLoading, setIsLoading] = useState(false)
     const { data } = useSession()
@@ -49,8 +51,8 @@ const Header: FC<Props> = ({ user }) => {
             <p className="col-span-2 md:col-span-1 md:row-start-3 md:col-start-2 font-semibold capitalize">{user.fullname}</p>
             <div className="flex justify-center col-span-2 border-y border-gray-200 p-2 -mx-4 md:col-span-1 md:border-none md:gap-7 md:justify-start md:-m-0">
                 <LabelValue label="posts" value={user._count.posts} />
-                <LabelValue label="followers" value={user._count.followers} />
-                <LabelValue label="following" value={user._count.following} />
+                <LabelValue label="followers" value={user._count.followers} onClick={onFollowersClick} />
+                <LabelValue label="following" value={user._count.following} onClick={onFollowingClick} />
             </div>
         </div>
     )
@@ -58,9 +60,9 @@ const Header: FC<Props> = ({ user }) => {
 
 
 
-const LabelValue: FC<{ label: string, value: number | string }> = ({ label, value }) => {
+const LabelValue: FC<{ label: string, value: number | string, onClick?: () => void }> = ({ label, value, onClick }) => {
     return (
-        <p className="flex flex-col flex-1 items-center text-gray-500 md:flex-grow-0 md:flex-row md:text-gray-900 md:gap-2">
+        <p className="flex flex-col flex-1 items-center text-gray-500 md:flex-grow-0 md:flex-row md:text-gray-900 md:gap-2" role="button" onClick={+value === 0 ? undefined : onClick}>
             <span className="font-semibold text-black">{value}</span>
             {label}
         </p>

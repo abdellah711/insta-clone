@@ -1,15 +1,17 @@
 
 describe('Home page', () => {
-    beforeEach(() => {
+    before(() => {
         cy.exec('yarn db:reset && yarn db:seed')
+    })
+    beforeEach(() => {
         cy.visit('/')
         cy.login()
     })
-    it.skip('shows suggestions and allow user to follow', () => {
+    it('shows suggestions and allow user to follow', () => {
         cy.viewport('macbook-11')
         cy.get('[role=suggestions]').should('exist').contains('button', /follow/i).click().should('have.text', 'Following')
     })
-    it.skip('allows user to like posts', () => {
+    it('allows user to like posts', () => {
         cy.get('article').first().contains('p', /\d like(s?)/i).should('have.text', '0 likes')
         cy.get('article').first().find('button > svg').last().click()
         cy.get('article').first().contains('p', /\d like(s?)/i).should('have.text', '1 like')
@@ -17,7 +19,7 @@ describe('Home page', () => {
         cy.get('article').first().contains('p', /\d like(s?)/i).should('have.text', '1 like')
     })
 
-    it.skip('allows user to create new posts', () => {
+    it('allows user to create new posts', () => {
         cy.get('[role=dialog]').should('not.exist')
         cy.get('[aria-label="Add post"]').click()
         cy.get('[role=dialog]').should('exist')

@@ -1,11 +1,15 @@
 
 describe('Authentication', () => {
+
+  before(()=>{
+    cy.exec('yarn db:reset')
+  })
+
   beforeEach(() => {
     cy.visit('/')
   })
 
   it('allow user to sign up', () => {
-    cy.exec('yarn db:reset')
 
     cy.contains(/sign up/i).should("have.attr", 'href', '/auth/signup').click()
     cy.get('input[name="fullname"]').should('exist')
