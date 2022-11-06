@@ -43,7 +43,7 @@ const Post: FC<PostProps> = ({ post, onClick }) => {
     return (
         <div className="overflow-hidden rounded relative group cursor-pointer" onClick={onClick}>
             <Image src={post.image} layout="responsive" width={400} height={400} sizes="(max-width: 896px) 30vw; 350px" objectFit="cover" />
-            <div className="absolute inset-0 flex justify-center items-center gap-3 bg-gray-900/10 transition duration-150 opacity-0 group-hover:opacity-100">
+            <div className="absolute inset-0 flex justify-center items-center gap-3 bg-gray-900/30 transition duration-150 opacity-0 group-hover:opacity-100">
                 <svg
                     className="w-8 fill-white"
                     viewBox="0 0 513 513">
