@@ -6,7 +6,7 @@ export const middleware: NextMiddleware = async (req, ev) => {
     const token = await getToken({ req, secret: process.env.JWT_SECRET })
     const url = req.nextUrl.clone()
 
-    if(url.pathname.startsWith('/api/auth')) return NextResponse.next()
+    if(url.pathname.startsWith('/api/auth') || url.pathname.startsWith('/assets') || url.pathname === '/favicon.ico') return NextResponse.next()
 
     if (url.pathname.startsWith('/auth') && !url.pathname.startsWith('/auth/fb') && !url.pathname.startsWith('/auth/logout')) {
         if(token){
