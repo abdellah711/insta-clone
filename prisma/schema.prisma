@@ -6,22 +6,22 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  fullname String
-  email    String    @unique
-  username String?   @unique
-  image    String?
-  password String?
-  fId      Int?      @unique
-  posts    Post[]
-  likes    Like[]
-  followers  Follows[] @relation("followers")
-  following  Follows[] @relation("following")
+  id        Int       @id @default(autoincrement())
+  fullname  String    @db.VarChar(255)
+  email     String    @unique
+  username  String?   @unique
+  image     String?
+  password  String?
+  fId       Int?      @unique
+  posts     Post[]
+  likes     Like[]
+  followers Follows[] @relation("followers")
+  following Follows[] @relation("following")
 }
 
 model Post {
@@ -47,7 +47,7 @@ model Follows {
   followerId Int
   follower   User @relation("following", fields: [followerId], references: [id])
   followedId Int
-  followed   User @relation("followers",fields: [followedId], references: [id])
+  followed   User @relation("followers", fields: [followedId], references: [id])
 
   @@id([followedId, followerId])
 }

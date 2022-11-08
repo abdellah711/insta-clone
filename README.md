@@ -30,6 +30,10 @@ NEXTAUTH_URL=http://localhost:3000
 FB_CLIENT_ID=
 FB_SECRET=
 ```
+Then run the following command to update your PostgreSQL database:
+```
+npx prisma db push
+```
 Finally, run the development server:
 
 ```bash
