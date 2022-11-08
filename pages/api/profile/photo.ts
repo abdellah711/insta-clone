@@ -1,18 +1,14 @@
+import formidable, { Fields, File, Files } from "formidable";
 import { NextApiHandler } from "next";
-import formidable from 'formidable'
-import type { Fields, Files, File } from 'formidable'
 import fs from 'fs'
 import { getToken } from "next-auth/jwt";
 import { promisify } from "util";
 import prisma from 'lib/prisma'
 
-interface IResponse {
-    message?: string;
-}
 
 const copyFile = promisify(fs.copyFile)
 
-const handler: NextApiHandler<IResponse> = async (req, res) => {
+const handler: NextApiHandler = async (req, res) => {
     const token = await getToken({ req, secret: process.env.JWT_SECRET })
     if (!token) return res.status(401).json({ message: 'You are not authenticated' })
 
@@ -24,23 +20,24 @@ const handler: NextApiHandler<IResponse> = async (req, res) => {
             resolve({ fields, files })
         })
     })
-    const description = data.fields['description'] as string
-    const image = data.files['image'] as File
-    if (!image || !description) return res.status(400).json({ message: 'Missing fields' })
 
+    const photo = data.files['photo'] as File
 
-    const imagePath = `/assets/images/posts/${token.id}-${Date.now()}${image.originalFilename}`
+    const imagePath = `/assets/images/users/${token.id}-${Date.now()}${photo.originalFilename}`
     const basePath = process.env.NODE_ENV === 'development' ? './public' : '.'
 
-    await copyFile(image.filepath, basePath + imagePath)
-    await prisma.post.create({
+    await copyFile(photo.filepath, basePath + imagePath)
+
+    await prisma.user.update({
+        where: {
+            id: +token.id,
+        },
         data: {
-            image: imagePath,
-            content: description,
-            userId: +token.id,
+            image: imagePath
         }
     })
-    res.json({ message: "content posted successfully" })
+
+    res.json({ url: imagePath })
 }
 
 export const config = {
@@ -48,5 +45,6 @@ export const config = {
         bodyParser: false
     }
 }
+
 
 export default handler

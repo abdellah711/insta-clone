@@ -30,7 +30,7 @@ const Suggestion: FC<Props> = ({ user }) => {
             <Link href={'/profile/' + user.id}>
                 <a className='flex flex-1 gap-3 items-center'>
                     <img
-                        className='w-10 rounded-full border border-gray-400'
+                        className='w-10 aspect-square rounded-full border border-gray-400'
                         src={user.image ?? '/assets/images/default-profile.png'} />
                     <div className='flex-1'>
                         <p className='hover:underline'>{user.username}</p>

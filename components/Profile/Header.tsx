@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { ChangeEventHandler, FC, useState } from "react"
 import Image from 'next/image'
 import DefaultImage from 'public/assets/images/default-profile.png'
 import { useSession } from "next-auth/react"
@@ -12,8 +12,35 @@ interface Props {
 
 const Header: FC<Props> = ({ user, onFollowersClick, onFollowingClick }) => {
     const [isFollowed, setIsFollowed] = useState(user.followers.length > 0)
+    const [profilePhoto, setProfilePhoto] = useState(user.image ?? DefaultImage)
     const [isLoading, setIsLoading] = useState(false)
+    const [isUploading, setIsUploading] = useState(false)
     const { data } = useSession()
+
+    const isCurrentUserProfile = data?.user.id === user.id
+
+    const handePhotoUpload: ChangeEventHandler<HTMLInputElement> = (e) => {
+        const photo = e.currentTarget.files?.[0]
+        if (!photo) return
+
+        const data = new FormData()
+        data.append('photo', photo, photo.name)
+        setIsUploading(true)
+
+        fetch('/api/profile/photo', {
+            method: 'POST',
+            body: data,
+        }).then(res => {
+            if (!res?.ok) {
+                throw new Error()
+            }
+            return res.json()
+        }).then(({ url }) => {
+            setIsUploading(false)
+            setProfilePhoto(url)
+        }).catch(() => setIsUploading(false))
+
+    }
 
 
     const handleFollow = async () => {
@@ -30,13 +57,32 @@ const Header: FC<Props> = ({ user, onFollowersClick, onFollowingClick }) => {
 
     return (
         <div className="grid grid-cols-[auto_1fr] gap-4 px-4 md:gap-x-16 lg:gap-x-24 md:py-4">
-            <a className="rounded-full overflow-hidden relative md:w-32 w-20 aspect-square block md:row-span-3">
-                <Image src={user.image ?? DefaultImage} layout="fill" objectFit="cover" />
-            </a>
+            <label
+                className="rounded-full overflow-hidden relative md:w-32 w-20 aspect-square block md:row-span-3 cursor-pointer"
+            >
+                {isCurrentUserProfile &&
+                    <input
+                        type="file"
+                        name="img"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handePhotoUpload}
+                    />
+                }
+                <Image src={profilePhoto} objectFit="cover" layout="fill" priority />
+                {/* progress bar */}
+                {
+                    isUploading && (
+                        <div className="absolute inset-0 bg-black/5 grid place-items-center">
+                            <div className="rounded-full w-7 aspect-square border-2 border-black/20 border-t-black/80 animate-spin" />
+                        </div>
+                    )
+                }
+            </label>
             <div className="md:flex md:gap-6">
                 <h1 className="text-3xl font-light overflow-hidden text-ellipsis text-gray-700">{user.username}</h1>
                 {
-                    data?.user.id && user.id !== +(data?.user.id) && (
+                    !isCurrentUserProfile && (
                         isLoading ?
                             <div className="w-6 mt-2 lg:mt-0 aspect-square border-[3px] border-gray-700 self-center rounded-full border-t-transparent mx-8 animate-spin" />
                             :
